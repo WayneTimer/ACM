@@ -1,4 +1,6 @@
-#include <cstdio>
+#ifndef _maxflow_h
+#define _maxflow_h
+
 #include <vector>
 
 using namespace std;
@@ -137,75 +139,4 @@ public:
     void output_flow(); // need to be define when use
 };
 
-//----------------
-
-Graph<int> gra;
-int sum;
-
-template <typename T>
-void Maxflow<T>::output_flow()
-{
-    int l;
-    l = (n-1)>>1;
-    for (int i=2;i<2+l;i++)
-    {
-        for (int j=2+l;j<2+(l<<1);j++)
-            if (flow[i][j]>0) printf("%d ",flow[i][j]);
-            else printf("0 ");
-        puts("");
-    }
-}
-
-inline bool build()
-{
-    int s1,s2,n,m,nn,x;
-
-    s1=s2=0;
-
-    scanf("%d%d",&n,&m);
-    nn=n;
-    for (int j=1;j<=n;j++)
-    {
-        scanf("%d",&x);
-        s1+=x;
-        gra.e.push_back(Edge<int>(0,j,x));
-        gra.e.push_back(Edge<int>(j,j+n,999999));
-    }
-    n=(n<<1)+1;
-    for (int i=nn+1;i<n;i++)
-    {
-        scanf("%d",&x);
-        s2+=x;
-        gra.e.push_back(Edge<int>(i,n,x));
-    }
-    n++;
-    gra.n=n;
-
-    if (s1!=s2) return false;
-    sum=s1;
-
-    for (int i=0;i<m;i++)
-    {
-        int x,y;
-        scanf("%d%d",&x,&y);
-        gra.e.push_back(Edge<int>(x,y+nn,999999));
-        gra.e.push_back(Edge<int>(y,x+nn,999999));
-    }
-    return true;
-}
-
-int main()
-{
-    build();
-    Maxflow<int> maxflow(gra,999999);
-    int s;
-    s=maxflow.solve();
-    if (sum==s)
-    {
-        puts("YES");
-        maxflow.output_flow();
-    }
-    else
-        puts("NO");
-    return 0;
-}
+#endif
