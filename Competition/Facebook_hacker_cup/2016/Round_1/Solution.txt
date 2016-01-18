@@ -1,0 +1,28 @@
+https://www.facebook.com/notes/facebook-hacker-cup/hacker-cup-2016-round-1-solutions/1267910159891549
+
+
+Coding Contest Creation
+
+This problem can be solved by iterating over the N problems in order, greedily assembling contests as we go. We should keep track of the number of problems in the current contest, and the total number of new problems which have been added so far. For each problem, it should be included in the current contest if possible, inserting new problems before it if necessary - that is, if the current contest has fewer than 4 problems, and the new problem's value is larger than that of the previous problem, but not too much larger (i.e. it's possible to insert 0 or more problems before it at intervals of 10 rating points, without exceeding 4 problems in the contest). Otherwise, the current contest should be completed with new problems, and the current problem should be used to start a new contest.
+
+
+Laundro, Matt
+
+Each of the L loads should be greedily washed such that it finishes as soon as possible. For each load in turn, we need to find the washer which can finish washing it at the earliest possible time. Naively, this simulation would take O(LN) time, which is too slow. However, it can be optimized to O(L log(N)) time by maintaining a priority queue of pairs of values -- each washer's completion time, along with its corresponding washer index. This queue should initially be populated with the pair of values (W_i, i), for each washer i from 1 to N. At each step, the washer i with the earliest completion time t should be popped off the queue, and it should be re-inserted as the pair of values (t + W_i, i).
+
+The above process yields the optimal ordered list of times at which the L loads will finish being washed. These loads should then be greedily dried in the same order, each time similarly using the dryer that will finish as early as possible. Because the dryers all take the same amount of time, they can simply be used in order, and reused when they’re finished. For example, we’ll use dryers 1, 2, ..., M-1, M, 1, 2, etc. For each dryer, we should maintain the earliest time at which it will be available, and update it accordingly when it's used. In this fashion, we can determine when each of the washed loads will finish being dried, the last of which will be the answer.
+
+
+Yachtzee
+
+Every yacht-building step can be thought of as a particular interval [x, y) such that, if the programmer's initial amount of money is in this interval, they will complete all prior steps and then be unable to complete this step. Note that these steps should continue infinitely past the end of completing a single yacht - for example, the (N+1)th step's interval has the same size as that of the 1st step (namely, y - x = C[1]), but has larger values of x and y.
+The range of possible initial amounts of money [A, B) (note that having exactly B dollars can be ignored, since it has probability 0) will then either be contained entirely within one step interval, or it will include the suffix of one step interval, cover 0 or more complete step intervals, and then include the prefix of another step interval.
+When the intersection of the overall range [A, B) with a particular step interval [x, y) is [a, b), the programmer's initial money interval [a, b) will be mapped to a final money interval of [a-x, b-x). Therefore, the contribution of such an intersection to the answer is ((a - x) + (b - x)) / 2 * (b - a) / (B - A).
+We'd like to iterate over every single step interval that overlaps with the range [A, B), compute the intersection, and add on to the total answer as described above. The set of steps of interest will either be contained entirely within one yacht cycle, or will be made up of the suffix of a yacht cycle, 0 or more complete yacht cycles, and then the prefix of another yacht cycle. Therefore, if we precompute the value of a complete yacht cycle (the sum of values of full intersections with step intervals 1 to N), this entire process can be implemented in O(N) time.
+
+
+Boomerang Tournament
+
+The worst placing that each boomerangist can get is simple to compute -- if they can beat everyone else directly, they'll always end up in first place, and if they can't, then they can always be made to lose in the first round.
+
+As for the best placings, we can use bitmask DP. Let DP[b][i] be true if the ith boomerangist can win a sub-tournament consisting of the boomerangists in bitmask b (the number of bits set in b should be a power of 2), and false otherwise. Everyone can win a sub-tournament consisting only of themselves (DP[1<<i][i] = 1 for 1 <= i <= N). For a larger sub-tournament consisting of the x competitors in some bitmask b, we must consider all possible subdivisions of the competitors into two equal halves (bitmasks b_1 and b_2, each with x/2 bits set, and with b_1 | b_2 = b). For all pairs of winners of the two halves i and j (such that DP[b_1][i] = DP[b_2][j] = true), we know that DP[b][i] = true if W[i][j] = 1, and otherwise we know that DP[b][j] = true. Finally, for each competitor i, their best possible placing can be determined by the size of the largest sub-tournament that they can win.
