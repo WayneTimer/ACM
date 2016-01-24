@@ -1,0 +1,57 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{amsmath}
+
+\begin{document}
+
+\begin{bfseries}
+Description
+\end{bfseries}
+\\
+Have a random amount of money from range [A,B], build a thing cost N steps, and each step cost $C_i$ money. When the remain money can not afford a step, stop. Calculate the expected amount of final remaining money. Note: If there is still enough money left after N steps, then continue building another thing.
+\\
+\\
+\\
+\begin{bfseries}
+Take a example:
+\end{bfseries}
+\\
+Initial money: [40,140]\\
+N = 5 steps:\\
+i \ \ = [0] [1] [2] [3] [4]\\
+$C_i$ =  4 \ \ 9 \ \ 1 \ 12 \ 7\\
+$S_i$ =  4 \ 13 \ 14 \ 26 \ 33\\
+\\
+1. Continue building, until [40\%33, 140-40/33*33] = [7,107]\\
+2. Afford step 0, remain [3,103]\\
+3. Let A becomes 0, consider step 1:
+\[
+E_0 = \frac{min(C_i,B)-3}{103-3} \times \frac{3+9}{2} = \frac{9-3}{103-3} \times \frac{3+9}{2} = 0.36
+\]
+4. Consider step 2:
+\[
+E_1 = \frac{103-3-6}{103-3} \times \frac{1}{103-3-6} \times \frac{1}{2} + \frac{94}{100} \times \frac{93}{94} \times \frac{1}{93} \times \frac{1}{2} + ... = \frac{1}{100} \times \frac{1}{2} \times (2+1)
+\]
+(Note: 94/33 = 2.xxx, 94\%33 = 28, 28 $>$ 1, so +1. And then 28-1=27)\\
+5. Consider step 3:
+\[
+E_2 = \frac{12}{100} \times \frac{12}{2} \times (2+1)
+\]
+(Note: 27$>$12, 27-12=15)\\
+6. Consider step 4:
+\[
+E_3 = \frac{7}{100} \times \frac{7}{2} \times (2+1)
+\]
+(Note: 15$>$7, 15-7=8)\\
+7. Consider step 0:
+\[
+E_4 = \frac{4}{100} \times \frac{4}{2} \times (2+1)
+\]
+(Note: 8$>$4, 8-4=4)\\
+8. Consider step 1:
+\[
+E_5 = \frac{9}{100} \times \frac{9}{2} \times 2 + \frac{4}{100} \times \frac{4}{2}
+\]
+(Note: 4$<$9)\\
+9. Finally, Ans = $E_0$+$E_1$+$E_2$+$E_3$+$E_4$+$E_5$
+\end{document}
